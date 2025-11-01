@@ -1,3 +1,10 @@
+# House Price Prediction API
+
+# Copyright (c) 2025 Branden Rease Abrol
+
+# Licensed under the MIT License
+
+
 from fastapi import FastAPI
 from pydantic import BaseModel
 import pandas as pd
