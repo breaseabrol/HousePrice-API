@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-analysis-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: data-api
+  template:
+    metadata:
+      labels:
+        app: data-api
+    spec:
+      containers:
+      - name: data-api
+        image: data-analysis-api:latest
+        ports:
+        - containerPort: 8080
