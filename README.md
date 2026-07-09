@@ -23,6 +23,11 @@ This project demonstrates end-to-end ML engineering: from data preprocessing and
 | Mean Squared Error | 1.20e12 |
 | Features Used | 16 (12 input + 4 engineered) |
 
+## 📊 Dataset
+
+This project uses the [Housing Prices Dataset](https://www.kaggle.com/datasets/yasserh/housing-prices-dataset) 
+from Kaggle, released under CC0 (public domain).
+
 ## 🗃️ Model Artifacts
 
 `model.pkl` and `scaler.pkl` are intentionally excluded from version control
