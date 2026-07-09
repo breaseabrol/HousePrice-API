@@ -24,8 +24,9 @@ feature_order = [
     'furnishingstatus', 'mainroad_yes', 'guestroom_yes',
     'basement_yes', 'hotwaterheating_yes', 'airconditioning_yes',
     'prefarea_yes', 'area_bedrooms', 'stories_bathrooms',
-    'luxury_index','amenities_count'
+    'luxury_index', 'amenities_count'
 ]
+
 
 class HouseData(BaseModel):
     area: float
@@ -40,6 +41,7 @@ class HouseData(BaseModel):
     hotwaterheating_yes: int
     airconditioning_yes: int
     prefarea_yes: int
+
 
 @app.post("/predict")
 def predict(data: HouseData):
