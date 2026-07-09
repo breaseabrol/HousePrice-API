@@ -23,9 +23,22 @@ This project demonstrates end-to-end ML engineering: from data preprocessing and
 | Mean Squared Error | 1.20e12 |
 | Features Used | 16 (12 input + 4 engineered) |
 
+## 🗃️ Model Artifacts
+
+`model.pkl` and `scaler.pkl` are intentionally excluded from version control
+(see `.gitignore`) — binary model artifacts don't belong in git history, as
+they bloat repo size and cause unnecessary merge conflicts on every retrain.
+
+To regenerate them locally, run the training workflow in `Project.ipynb`.
+The notebook will output `model.pkl` and `scaler.pkl` into the project root,
+which `main.py` loads on startup.
+
+> **Note:** You must generate these files before running the API locally —
+> see [Quick Start](#-quick-start) below.
+
 ## 🏗️ Architecture
 
-```
+\```
 ┌─────────────────────────────────────────┐
 │   Client Request (JSON)                 │
 └────────────────┬────────────────────────┘
@@ -44,7 +57,7 @@ This project demonstrates end-to-end ML engineering: from data preprocessing and
 ┌─────────────────────────────────────────┐
 │   JSON Response (Predicted Price)       │
 └─────────────────────────────────────────┘
-```
+\```
 
 ## 🚀 Quick Start
 
@@ -55,28 +68,40 @@ This project demonstrates end-to-end ML engineering: from data preprocessing and
 
 ### Installation
 
-```bash
+\```bash
 # Clone repository
 git clone https://github.com/breaseabrol/house-price-prediction.git
 cd house-price-prediction
 
 # Install dependencies
 pip install -r requirements.txt
-```
+\```
+
+### Generate Model Artifacts
+
+`model.pkl` and `scaler.pkl` are not tracked in this repo (see
+[Model Artifacts](#️-model-artifacts)) and must be generated before the API
+will run:
+
+\```bash
+# Run all cells in Project.ipynb to train the model and save
+# model.pkl and scaler.pkl into the project root
+jupyter notebook Project.ipynb
+\```
 
 ### Run Locally
 
-```bash
+\```bash
 # Start FastAPI server
 uvicorn main:app --reload --port 8080
 
 # API will be available at http://localhost:8080
 # Interactive docs: http://localhost:8080/docs
-```
+\```
 
 ### Example Request
 
-```bash
+\```bash
 curl -X POST "http://localhost:8080/predict" \
   -H "Content-Type: application/json" \
   -d '{
@@ -93,30 +118,30 @@ curl -X POST "http://localhost:8080/predict" \
     "airconditioning_yes": 1,
     "prefarea_yes": 1
   }'
-```
+\```
 
 **Response:**
-```json
+\```json
 {
   "prediction": 13250000.5
 }
-```
+\```
 
 ## 📦 Deployment
 
 ### Docker
 
-```bash
+\```bash
 # Build image
 docker build -t house-price-api:latest .
 
 # Run container
 docker run -p 8080:8080 house-price-api:latest
-```
+\```
 
 ### Kubernetes
 
-```bash
+\```bash
 # Deploy
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
@@ -127,22 +152,23 @@ kubectl get svc
 
 # Access via LoadBalancer
 kubectl port-forward svc/data-api-service 8080:80
-```
+\```
 
 ## 📂 Project Structure
 
-```
+\```
 house-price-prediction/
 ├── main.py                 # FastAPI application
-├── model.pkl               # Trained XGBoost model
-├── scaler.pkl              # MinMaxScaler for normalization
+├── model.pkl                # Trained XGBoost model (generated, gitignored)
+├── scaler.pkl                # MinMaxScaler for normalization (generated, gitignored)
 ├── requirements.txt        # Python dependencies
-├── Dockerfile              # Container configuration
-├── deployment.yaml         # Kubernetes deployment
-├── service.yaml            # Kubernetes service
-├── Project.ipynb           # Jupyter notebook (model training)
-└── README.md               # This file
-```
+├── Dockerfile               # Container configuration
+├── deployment.yaml          # Kubernetes deployment
+├── service.yaml              # Kubernetes service
+├── Project.ipynb             # Jupyter notebook (model training)
+├── .gitignore                 # Excludes model artifacts, caches, env files
+└── README.md                # This file
+\```
 
 ## 🔧 Model Details
 
@@ -163,7 +189,7 @@ house-price-prediction/
 
 ### Model Hyperparameters
 
-```python
+\```python
 XGBRegressor(
     n_estimators=800,
     learning_rate=0.05,
@@ -172,17 +198,17 @@ XGBRegressor(
     colsample_bytree=0.8,
     random_state=42
 )
-```
+\```
 
 ## 📈 Training Pipeline
 
-See `Project.ipynb` for complete training workflow:
+See `Project.ipynb` for the complete training workflow:
 
 1. Data Loading & Exploration
 2. Feature Engineering
 3. Train-Test Split (70-30)
 4. Model Training & Validation
-5. Model & Scaler Serialization
+5. Model & Scaler Serialization (outputs `model.pkl` and `scaler.pkl`)
 
 ## 🛠️ Technologies Used
 
@@ -199,7 +225,7 @@ See `Project.ipynb` for complete training workflow:
 **Method:** POST
 
 **Request Body:**
-```json
+\```json
 {
   "area": float,
   "bedrooms": int,
@@ -214,21 +240,21 @@ See `Project.ipynb` for complete training workflow:
   "airconditioning_yes": int (0 or 1),
   "prefarea_yes": int (0 or 1)
 }
-```
+\```
 
 **Response:**
-```json
+\```json
 {
   "prediction": float
 }
-```
+\```
 
 **Error Response:**
-```json
+\```json
 {
   "error": "Error message"
 }
-```
+\```
 
 ## 🎓 Learning Outcomes
 
@@ -239,7 +265,7 @@ This project demonstrates:
 - ✅ REST API design with FastAPI
 - ✅ Containerization with Docker
 - ✅ Kubernetes microservices deployment
-- ✅ Production-grade model persistence
+- ✅ Production-grade model persistence, with binary artifacts kept out of version control
 
 ## 🤝 Contributing
 
@@ -258,7 +284,6 @@ This project is open source and available under the MIT License.
 - GitHub: [@breaseabrol](https://github.com/breaseabrol)
 - LinkedIn: [breaseabrol](https://linkedin.com/in/breaseabrol)
 - Email: brandenabrol6805@gmail.com
-
 
 ---
 
