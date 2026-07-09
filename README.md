@@ -38,7 +38,7 @@ which `main.py` loads on startup.
 
 ## 🏗️ Architecture
 
-\```
+```
 ┌─────────────────────────────────────────┐
 │   Client Request (JSON)                 │
 └────────────────┬────────────────────────┘
@@ -57,7 +57,7 @@ which `main.py` loads on startup.
 ┌─────────────────────────────────────────┐
 │   JSON Response (Predicted Price)       │
 └─────────────────────────────────────────┘
-\```
+```
 
 ## 🚀 Quick Start
 
@@ -68,14 +68,14 @@ which `main.py` loads on startup.
 
 ### Installation
 
-\```bash
+```bash
 # Clone repository
 git clone https://github.com/breaseabrol/house-price-prediction.git
 cd house-price-prediction
 
 # Install dependencies
 pip install -r requirements.txt
-\```
+```
 
 ### Generate Model Artifacts
 
@@ -83,25 +83,25 @@ pip install -r requirements.txt
 [Model Artifacts](#️-model-artifacts)) and must be generated before the API
 will run:
 
-\```bash
+```bash
 # Run all cells in Project.ipynb to train the model and save
 # model.pkl and scaler.pkl into the project root
 jupyter notebook Project.ipynb
-\```
+```
 
 ### Run Locally
 
-\```bash
+```bash
 # Start FastAPI server
 uvicorn main:app --reload --port 8080
 
 # API will be available at http://localhost:8080
 # Interactive docs: http://localhost:8080/docs
-\```
+```
 
 ### Example Request
 
-\```bash
+```bash
 curl -X POST "http://localhost:8080/predict" \
   -H "Content-Type: application/json" \
   -d '{
@@ -118,30 +118,30 @@ curl -X POST "http://localhost:8080/predict" \
     "airconditioning_yes": 1,
     "prefarea_yes": 1
   }'
-\```
+```
 
 **Response:**
-\```json
+```json
 {
   "prediction": 13250000.5
 }
-\```
+```
 
 ## 📦 Deployment
 
 ### Docker
 
-\```bash
+```bash
 # Build image
 docker build -t house-price-api:latest .
 
 # Run container
 docker run -p 8080:8080 house-price-api:latest
-\```
+```
 
 ### Kubernetes
 
-\```bash
+```bash
 # Deploy
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
@@ -152,11 +152,11 @@ kubectl get svc
 
 # Access via LoadBalancer
 kubectl port-forward svc/data-api-service 8080:80
-\```
+```
 
 ## 📂 Project Structure
 
-\```
+```
 house-price-prediction/
 ├── main.py                 # FastAPI application
 ├── model.pkl                # Trained XGBoost model (generated, gitignored)
@@ -168,7 +168,7 @@ house-price-prediction/
 ├── Project.ipynb             # Jupyter notebook (model training)
 ├── .gitignore                 # Excludes model artifacts, caches, env files
 └── README.md                # This file
-\```
+```
 
 ## 🔧 Model Details
 
@@ -189,7 +189,7 @@ house-price-prediction/
 
 ### Model Hyperparameters
 
-\```python
+```python
 XGBRegressor(
     n_estimators=800,
     learning_rate=0.05,
@@ -198,7 +198,7 @@ XGBRegressor(
     colsample_bytree=0.8,
     random_state=42
 )
-\```
+```
 
 ## 📈 Training Pipeline
 
@@ -225,7 +225,7 @@ See `Project.ipynb` for the complete training workflow:
 **Method:** POST
 
 **Request Body:**
-\```json
+```json
 {
   "area": float,
   "bedrooms": int,
@@ -240,21 +240,21 @@ See `Project.ipynb` for the complete training workflow:
   "airconditioning_yes": int (0 or 1),
   "prefarea_yes": int (0 or 1)
 }
-\```
+```
 
 **Response:**
-\```json
+```json
 {
   "prediction": float
 }
-\```
+```
 
 **Error Response:**
-\```json
+```json
 {
   "error": "Error message"
 }
-\```
+```
 
 ## 🎓 Learning Outcomes
 
@@ -284,6 +284,7 @@ This project is open source and available under the MIT License.
 - GitHub: [@breaseabrol](https://github.com/breaseabrol)
 - LinkedIn: [breaseabrol](https://linkedin.com/in/breaseabrol)
 - Email: brandenabrol6805@gmail.com
+
 
 ---
 
