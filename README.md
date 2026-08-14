@@ -1,17 +1,20 @@
 # House Price Prediction API
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Live on Cloud Run](https://img.shields.io/badge/Live-Cloud%20Run-4285F4?logo=googlecloud&logoColor=white)](https://house-price-api-10382151341.australia-southeast1.run.app/docs)
 
-A production-ready machine learning API for predicting housing prices using XGBoost, deployed on Kubernetes with FastAPI.
+A production-ready machine learning API for predicting housing prices using XGBoost, containerized with Docker and deployed on both Kubernetes and Google Cloud Run.
+
+**🔗 Live API:** [house-price-api-10382151341.australia-southeast1.run.app/docs](https://house-price-api-10382151341.australia-southeast1.run.app/docs)
 
 ## 🎯 Overview
 
-This project demonstrates end-to-end ML engineering: from data preprocessing and feature engineering to model training, API development, and cloud deployment. The system achieves **0.62 R² score** on test data with automated real-time predictions.
+This project demonstrates end-to-end ML engineering: from data preprocessing and feature engineering to model training, API development, containerization, and cloud deployment. The system achieves **0.62 R² score** on test data with automated real-time predictions, and is deployed on Google Cloud Run for public access.
 
 ## ✨ Features
 
 - **XGBoost ML Model** – Trained on housing dataset with advanced feature engineering
 - **FastAPI REST Endpoint** – Real-time predictions with Pydantic validation
-- **Kubernetes Deployment** – Containerized microservices with load balancing and fault tolerance
+- **Dual Deployment Paths** – Containerized for both local/on-prem Kubernetes and fully managed GCP Cloud Run
 - **Automated Feature Engineering** – Interaction terms, amenity aggregation, luxury index calculation
 - **Model Persistence** – Joblib serialization for reproducible inference across deployments
 
@@ -64,12 +67,25 @@ which `main.py` loads on startup.
 └─────────────────────────────────────────┘
 ```
 
+**Deployment paths:**
+
+```
+Docker Image
+    │
+    ├── Kubernetes (deployment.yaml + service.yaml)
+    │     └── LoadBalancer, 2 replicated pods
+    │
+    └── GCP Artifact Registry → Cloud Run
+          └── Fully managed, auto-scaling, public HTTPS endpoint
+```
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Python 3.8+
 - Docker
-- Kubernetes (optional, for deployment)
+- Kubernetes (optional, for local orchestration)
+- Google Cloud SDK (optional, for Cloud Run deployment)
 
 ### Installation
 
@@ -132,6 +148,28 @@ curl -X POST "http://localhost:8080/predict" \
 }
 ```
 
+You can run the exact same request against the **live Cloud Run deployment** by
+swapping the URL:
+
+```bash
+curl -X POST "https://house-price-api-10382151341.australia-southeast1.run.app/predict" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "area": 7420,
+    "bedrooms": 4,
+    "bathrooms": 2,
+    "stories": 3,
+    "parking": 2,
+    "furnishingstatus": 2,
+    "mainroad_yes": 1,
+    "guestroom_yes": 0,
+    "basement_yes": 0,
+    "hotwaterheating_yes": 0,
+    "airconditioning_yes": 1,
+    "prefarea_yes": 1
+  }'
+```
+
 ## 📦 Deployment
 
 ### Docker
@@ -158,6 +196,29 @@ kubectl get svc
 # Access via LoadBalancer
 kubectl port-forward svc/data-api-service 8080:80
 ```
+
+### Google Cloud Run
+
+The API is also deployed as a fully managed service on GCP, migrating the same
+container image from local Kubernetes into Cloud Run.
+
+```bash
+# Authenticate Docker with Artifact Registry
+gcloud auth configure-docker australia-southeast1-docker.pkg.dev
+
+# Tag and push the image
+docker tag house-price-api australia-southeast1-docker.pkg.dev/houseprice-api/house-price-repo/house-price-api
+docker push australia-southeast1-docker.pkg.dev/houseprice-api/house-price-repo/house-price-api
+
+# Deploy to Cloud Run
+gcloud run deploy house-price-api \
+  --image=australia-southeast1-docker.pkg.dev/houseprice-api/house-price-repo/house-price-api \
+  --platform=managed \
+  --region=australia-southeast1 \
+  --allow-unauthenticated
+```
+
+**Live endpoint:** [house-price-api-10382151341.australia-southeast1.run.app](https://house-price-api-10382151341.australia-southeast1.run.app/docs)
 
 ## 📂 Project Structure
 
@@ -221,6 +282,7 @@ See `Project.ipynb` for the complete training workflow:
 - **API Framework:** FastAPI, Pydantic, Uvicorn
 - **Containerization:** Docker
 - **Orchestration:** Kubernetes
+- **Cloud Deployment:** Google Cloud Run, Google Artifact Registry
 - **Serialization:** Joblib
 
 ## 📝 API Documentation
@@ -270,6 +332,7 @@ This project demonstrates:
 - ✅ REST API design with FastAPI
 - ✅ Containerization with Docker
 - ✅ Kubernetes microservices deployment
+- ✅ Cloud deployment on GCP Cloud Run via Artifact Registry
 - ✅ Production-grade model persistence, with binary artifacts kept out of version control
 
 ## 🤝 Contributing
